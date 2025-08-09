@@ -1,0 +1,28 @@
+
+SRCDIR := src
+BUILDDIR := build
+TARGET := libmylib.a
+CXX := g++
+CXXFLAGS := -O2 -std=c++17
+AR := ar
+ARFLAGS := rcs
+
+SRC := $(wildcard $(SRCDIR)/*.cpp)
+OBJ := $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SRC))
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+# Link all objects into static library
+$(TARGET): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $^
+
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
+
+clean:
+	rm -rf $(BUILDDIR) $(TARGET)
