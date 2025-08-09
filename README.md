@@ -53,7 +53,7 @@ This sample code prints out the ID of the entity that the player is currently lo
 ## Building the Project
 
 1.  Obtain the JNI headers from your JDK and place them into the `dependency` directory.
-2.  Run the `make` in the project's root directory to build a static library.
+2.  Run `make` in the project's root directory to build a static library.
 
 ---
 
