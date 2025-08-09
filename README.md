@@ -18,7 +18,27 @@ This is an SDK that simplifies interacting with Minecraft Forge 1.7.10 through J
 
 ### Basic Usage
 
-[Provide a simple code example demonstrating how to use the SDK]
+This sample code prints out the ID of the entity that the player is currently looking at.
+
+    `Java::Attach();
+
+    Java::GetEnv()->PushLocalFrame(16);
+
+    Minecraft minecraft(Java::GetEnv());
+    jobject rayTraceObject = minecraft.GetCurrentRayTrace();
+    RayTraceResult rayTraceResult(rayTraceObject, Java::GetEnv());
+
+    if (rayTraceResult.HitsEntity()) {
+        jobject entityObject = rayTraceResult.GetHitEntity();
+        Entity entity(entityObject, Java::GetEnv());
+        printf("Currently looking at entity with ID %i\n", entity.GetEntityID());
+    }
+
+    Java::GetEnv()->PopLocalFrame(nullptr);
+
+    Java::Detach();`
+
+    
 
 ---
 
