@@ -20,7 +20,7 @@ This is an SDK that simplifies interacting with Minecraft Forge 1.7.10 through J
 
 This sample code prints out the ID of the entity that the player is currently looking at.
 
-    `Java::Attach();
+    Java::Attach();
 
     Java::GetEnv()->PushLocalFrame(16);
 
@@ -36,7 +36,7 @@ This sample code prints out the ID of the entity that the player is currently lo
 
     Java::GetEnv()->PopLocalFrame(nullptr);
 
-    Java::Detach();`
+    Java::Detach();
 
     
 
