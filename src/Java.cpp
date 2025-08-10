@@ -67,7 +67,7 @@ namespace Java {
         if (!_class) {
             _class = customEnv->FindClass(name);
             if (!_class) {
-                //error handling ig
+                //TODO: error handling
             }
         }
 		customEnv->DeleteLocalRef(jname);

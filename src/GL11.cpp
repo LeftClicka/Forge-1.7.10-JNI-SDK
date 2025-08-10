@@ -138,7 +138,7 @@ namespace GL11 {
         const int red   = (color >> 16) & 0xFF;
         const int green = (color >> 8)  & 0xFF;
         const int blue  = (color)       & 0xFF;
-        Color4f(red, green, blue, alpha);
+        Color4f(red/255.0f, green/255.0f, blue/255.0f, alpha/255.0f);
     }
 
     void Vertex2i(int x, int y) {

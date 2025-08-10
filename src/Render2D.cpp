@@ -6,7 +6,12 @@
 
 namespace Render2D {
 
-    static const unsigned int GL_SRC_ALPHA = GL11::GetGLConst("GL_SRC_ALPHA"), GL_ONE_MINUS_SRC_ALPHA = GL11::GetGLConst("GL_ONE_MINUS_SRC_ALPHA");
+    static const unsigned int 
+    GL_SRC_ALPHA = GL11::GetGLConst("GL_SRC_ALPHA"),
+    GL_ONE_MINUS_SRC_ALPHA = GL11::GetGLConst("GL_ONE_MINUS_SRC_ALPHA"),
+    GL_QUADS = GL11::GetGLConst("GL_QUADS"), 
+    GL_TEXTURE_2D = GL11::GetGLConst("GL_TEXTURE_2D"),
+    GL_BLEND = GL11::GetGLConst("GL_BLEND");
 
     void DrawText(const char *text, int x, int y, int color, JNIEnv *env) {
         static jmethodID drawStringMethod = Java::GetMethod("net/minecraft/client/gui/FontRenderer", "func_78276_b", "(Ljava/lang/String;III)I", env);
@@ -21,7 +26,8 @@ namespace Render2D {
     }
 
     void DrawTextWithBloom(const char *text, int x, int y, int color, JNIEnv *env) {
-        GL11::PushMatrix();
+        GL11::Enable(GL_BLEND);
+        GL11::Disable(GL_TEXTURE_2D);
         GL11::BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         const float pulse = Math::GetPulse(3500);
         constexpr int alphaMin = 64;
@@ -49,18 +55,22 @@ namespace Render2D {
 
         env->DeleteLocalRef(jText);
         env->DeleteLocalRef(fontRenderer);
-        GL11::PopMatrix();
+        GL11::Disable(GL_BLEND);
+        GL11::Enable(GL_TEXTURE_2D);
     }
 
     void DrawRect(int x1, int y1, int x2, int y2, int color) {
-        static const unsigned int GL_QUADS= GL11::GetGLConst("GL_QUADS");
+        GL11::Enable(GL_BLEND);
+        GL11::Disable(GL_TEXTURE_2D);
         GL11::Color(color);
         GL11::Begin(GL_QUADS);
         GL11::Vertex2i(x1, y1);
         GL11::Vertex2i(x1, y2);
-        GL11::Vertex2i(x2, y1);
         GL11::Vertex2i(x2, y2);
+        GL11::Vertex2i(x2, y1);
         GL11::End();
+        GL11::Enable(GL_TEXTURE_2D);
+        GL11::Disable(GL_BLEND);
     }
 
     void DrawRectWithBloom(int x1, int y1, int x2, int y2, int color) {
@@ -70,9 +80,7 @@ namespace Render2D {
         constexpr int alphaMax = 128; 
         const int alpha = (int)(alphaMin + pulse * (alphaMax - alphaMin));
         const int bloomColor = (alpha << 24) | (color & 0x00FFFFFF);
-
-        DrawRect(x1-1, y1-1, x2+1, y2+1, bloomColor);
-        DrawRect(x1, y1, x2, y2, color);
+        DrawRect(x1, y1, x2, y2, bloomColor);
     }
 
     jobject GetFontRendererObject(JNIEnv *env) {
