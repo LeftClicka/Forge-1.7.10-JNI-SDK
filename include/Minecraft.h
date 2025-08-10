@@ -45,8 +45,7 @@ class Minecraft : public Object {
         /**
          * Returns the latest ray trace result (MovingObjectPosition) object.
          */
-        jobject GetCurrentRayTrace();
+        jobject GetCurrentRayTrace();    
     private:
-        jfieldID playerField, worldField, rayTraceField;
-        jfieldID gameFocusField;    
+        jfieldID playerField, worldField, gameFocusField, rayTraceField;
 };

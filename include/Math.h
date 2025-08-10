@@ -85,7 +85,21 @@ struct BoundingBox {
     Vec3 p1, p2;
 };
 
-/**
- * Returns a random integer between min and max (inclusive);
- */
-int GetRandomBetween(int min, int max);
+namespace Math {
+
+    /**
+     * 13 digit approximation of Pi
+     */
+    constexpr double PI = 3.141592653589;
+
+    /**
+     * Returns a random integer between min and max (inclusive);
+     */
+    int GetRandomBetween(int min, int max);
+
+    /**
+     * Returns a sine-based pulse. Pulse period is passed as parameter (milliseconds).
+     */
+    float GetPulse(long periodMilliseconds);
+
+}

@@ -2,7 +2,6 @@
 
 RayTraceResult::RayTraceResult(jobject instance, JNIEnv *env) : Object(instance, env) {
     jclass clazz = Java::GetClass("net/minecraft/util/MovingObjectPosition", env);
-    this->movingObjectClass = (jclass) env->NewGlobalRef(clazz);
     this->entityHitField = env->GetFieldID(clazz, "field_72308_g", "Lnet/minecraft/entity/Entity;");
     this->hitTypeField = env->GetFieldID(clazz, "field_72313_a", "Lnet/minecraft/util/MovingObjectPosition$MovingObjectType;");
     this->TYPE_ENTITY = Java::GetEnumGlobal("net/minecraft/util/MovingObjectPosition$MovingObjectType", "ENTITY", "Lnet/minecraft/util/MovingObjectPosition$MovingObjectType;", env);
@@ -11,7 +10,6 @@ RayTraceResult::RayTraceResult(jobject instance, JNIEnv *env) : Object(instance,
 }
 
 RayTraceResult::~RayTraceResult() {
-    env->DeleteGlobalRef(movingObjectClass);
     env->DeleteGlobalRef(TYPE_ENTITY);
     env->DeleteGlobalRef(TYPE_BLOCK);
 }

@@ -41,8 +41,8 @@
 *.dwo
 
 # dependencies
-dependency\jvm.lib
-dependency\jni.h
-dependency\jni_md.h
-dependency\jvmti.h
-dependency\jawt_md.h
+dependency/jvm.lib
+dependency/jni.h
+dependency/jni_md.h
+dependency/jvmti.h
+dependency/jawt_md.h

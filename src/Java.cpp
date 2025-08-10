@@ -93,5 +93,19 @@ namespace Java {
         return global;
     }
 
+    jfieldID GetField(const char *clazzName, const char *fieldName, const char *sig, JNIEnv *env) {
+        jclass clazz = GetClass(clazzName, env);
+        jfieldID field = env->GetFieldID(clazz, fieldName, sig);
+        env->DeleteLocalRef(clazz);
+        return field;
+    }
+
+    jmethodID GetMethod(const char *clazzName, const char *methodName, const char *sig, JNIEnv *env) {
+        jclass clazz = GetClass(clazzName, env);
+        jmethodID method = env->GetMethodID(clazz, methodName, sig);
+        env->DeleteLocalRef(clazz);
+        return method;
+    }
+
 
 }

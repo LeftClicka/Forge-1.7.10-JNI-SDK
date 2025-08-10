@@ -57,6 +57,16 @@ namespace Java {
      */
     jobject GetEnumGlobal(const char *className, const char *fieldName, const char *sig, JNIEnv *env);
 
+    /**
+     * Returns a field ID based on class name, field name and signature.
+     */
+    jfieldID GetField(const char *className, const char *fieldName, const char *sig, JNIEnv *env);
+
+    /**
+     * Returns a method ID based on class name, method name and signature.
+     */
+    jmethodID GetMethod(const char *className, const char *fieldName, const char *sig, JNIEnv *env);
+
 
     /**
      * Must be passed a local ref, UB if a global ref is passed!!

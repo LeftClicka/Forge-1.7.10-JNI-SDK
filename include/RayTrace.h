@@ -39,7 +39,6 @@ class RayTraceResult : public Object {
             return !HitsEntity() && !HitsBlock();
         }
     private:
-        jclass movingObjectClass;
         jfieldID entityHitField;
         jfieldID hitTypeField;
         jobject TYPE_ENTITY, TYPE_BLOCK;

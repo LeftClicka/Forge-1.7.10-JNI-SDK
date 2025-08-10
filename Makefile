@@ -1,7 +1,7 @@
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := libjnisdk.a
+TARGET := out/libjnisdk.a
 CXX := g++
 CXXFLAGS := -O2 -std=c++17
 AR := ar
