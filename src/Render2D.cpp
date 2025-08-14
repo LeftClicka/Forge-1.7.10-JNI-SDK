@@ -26,8 +26,6 @@ namespace Render2D {
     }
 
     void DrawTextWithBloom(const char *text, int x, int y, int color, JNIEnv *env) {
-        GL11::Enable(GL_BLEND);
-        GL11::Disable(GL_TEXTURE_2D);
         GL11::BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         const float pulse = Math::GetPulse(3500);
         constexpr int alphaMin = 64;
@@ -55,8 +53,6 @@ namespace Render2D {
 
         env->DeleteLocalRef(jText);
         env->DeleteLocalRef(fontRenderer);
-        GL11::Disable(GL_BLEND);
-        GL11::Enable(GL_TEXTURE_2D);
     }
 
     void DrawRect(int x1, int y1, int x2, int y2, int color) {
@@ -83,8 +79,37 @@ namespace Render2D {
         DrawRect(x1, y1, x2, y2, bloomColor);
     }
 
+    int GetFontHeight(JNIEnv *env) {
+        static jfieldID fontHeightField = Java::GetField("net/minecraft/client/gui/FontRenderer", "field_78288_b", "I", env);
+        jobject fontRenderer = GetFontRendererObject(env);
+        const int value = env->GetIntField(fontRenderer, fontHeightField);
+        env->DeleteLocalRef(fontRenderer);
+        return value;
+    }
+
+    int GetStringWidth(const char *str, JNIEnv *env) {
+        static jmethodID getStringWidthMethod = Java::GetMethod("net/minecraft/client/gui/FontRenderer", "func_78256_a", "(Ljava/lang/String;)I", env);
+        jobject fontRenderer = GetFontRendererObject(env);
+        jstring jText = env->NewStringUTF(str);
+        const int width = env->CallIntMethod(fontRenderer, getStringWidthMethod, jText);
+        env->DeleteLocalRef(fontRenderer);
+        env->DeleteLocalRef(jText);
+        return width;
+    }
+
+    Vec2 GetResolution(JNIEnv *env) {
+        static jfieldID widthField = Java::GetField("net/minecraft/client/Minecraft", "field_71443_c", "I", env);
+        static jfieldID heightField = Java::GetField("net/minecraft/client/Minecraft", "field_71440_d", "I", env);
+        #undef GetObject
+        jobject mc = Minecraft::GetObject(env);
+        Vec2 res = {(float)(env->GetIntField(mc, widthField)), (float)(env->GetIntField(mc, heightField))};
+        env->DeleteLocalRef(mc);
+        return res;
+    }
+
     jobject GetFontRendererObject(JNIEnv *env) {
         static jfieldID fontRendererField = Java::GetField("net/minecraft/client/Minecraft", "field_71466_p", "Lnet/minecraft/client/gui/FontRenderer;", env);
+        #undef GetObject
         jobject mc = Minecraft::GetObject(env);
         jobject fontRenderer = env->GetObjectField(mc, fontRendererField);
         env->DeleteLocalRef(mc);

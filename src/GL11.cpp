@@ -1,7 +1,7 @@
 #include "GL11.h"
 
-#include <windows.h>
 #include <cstring>
+#include <unordered_map>
 
 /**
  * TODO: As of now there is no error handling for when GetProcAddress fails.
@@ -31,6 +31,8 @@ namespace GL11 {
     static FN_Color3f glColor3f = nullptr;
     static FN_Color4f glColor4f = nullptr;
     static FN_Vertex2 glVertex2i = nullptr;
+
+    static std::unordered_map<const char *, void *> cachedFunctions;
 
     constexpr int GL_BLEND = 0x0BE2;
     constexpr int GL_MODELVIEW = 0x1700;
@@ -77,14 +79,14 @@ namespace GL11 {
         glPopMatrix();
     }
 
-    void Enable(int mode) {
+    void Enable(unsigned int mode) {
         if (!glEnable) {
             glEnable = (FN_Enable) GetProcAddress(GL_MODULE, "glEnable");
         }
         glEnable(static_cast<unsigned int>(mode));
     }
 
-    void Disable(int mode) {
+    void Disable(unsigned int mode) {
         if (!glDisable) {
             glDisable = (FN_Disable) GetProcAddress(GL_MODULE, "glDisable");
         } 
@@ -146,6 +148,15 @@ namespace GL11 {
             glVertex2i = (FN_Vertex2) GetProcAddress(GL_MODULE, "glVertex2i");
         }
         glVertex2i(x, y);
+    }
+
+    void *GetGLProc(const char *name) {
+        if (cachedFunctions.contains(name)) {
+            return cachedFunctions[name];
+        }
+        void *fnPointer = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(GetProcAddress(GL_MODULE, name)));
+        cachedFunctions[name] = fnPointer;
+        return fnPointer;
     }
 
 }

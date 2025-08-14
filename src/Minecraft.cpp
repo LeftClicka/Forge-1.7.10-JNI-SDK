@@ -12,14 +12,8 @@ jobject Minecraft::GetObject(JNIEnv *env) {
     return obj;
 }
 
-static jobject MakeGlobalRef(JNIEnv *env) {
-    jobject obj = Minecraft::GetObject(env);
-    jobject global = env->NewGlobalRef(obj);
-    env->DeleteLocalRef(obj);
-    return global;
-}
 
-Minecraft::Minecraft(JNIEnv *env) : Object(MakeGlobalRef(env), env) {
+Minecraft::Minecraft(JNIEnv *env) : Object(GetObject(env), env) {
     jclass mcClass = GetClass(env);
 
     this->playerField = env->GetFieldID(mcClass, "field_71439_g", "Lnet/minecraft/client/entity/EntityClientPlayerMP;");
@@ -47,14 +41,14 @@ bool Minecraft::HasGameplayFocus() {
     return env->GetBooleanField(instance, gameFocusField);
 }
 
-jobject Minecraft::GetPlayer() {
-    return env->GetObjectField(instance, playerField);
+Entity Minecraft::GetPlayer() {
+    return Entity(env->GetObjectField(instance, playerField), env);
 }
 
-jobject Minecraft::GetWorld() {
-    return env->GetObjectField(instance, worldField);
+World Minecraft::GetWorld() {
+    return World(env->GetObjectField(instance, worldField), env);
 }
 
-jobject Minecraft::GetCurrentRayTrace() {
-    return env->GetObjectField(instance, rayTraceField);
+RayTraceResult Minecraft::GetCurrentRayTrace() {
+    return RayTraceResult(env->GetObjectField(instance, rayTraceField), env);
 }

@@ -2,6 +2,8 @@
 
 #include "Object.h"
 #include "Entity.h"
+#include "RayTrace.h"
+#include "World.h"
 
 #undef GetObject
 
@@ -37,15 +39,15 @@ class Minecraft : public Object {
         /**
          * Returns the local player object.
          */
-        jobject GetPlayer();
+        Entity GetPlayer();
         /**
          * Returns the local world object.
          */
-        jobject GetWorld();
+        World GetWorld();
         /**
          * Returns the latest ray trace result (MovingObjectPosition) object.
          */
-        jobject GetCurrentRayTrace();    
+        RayTraceResult GetCurrentRayTrace();    
     private:
         jfieldID playerField, worldField, gameFocusField, rayTraceField;
 };

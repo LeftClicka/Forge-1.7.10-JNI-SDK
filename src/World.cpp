@@ -12,23 +12,21 @@ World::~World() {
     env->DeleteGlobalRef(worldClass);
 }
 
-jobject World::GetEntityList() {
+List World::GetEntityList() {
     static jfieldID entityListField = env->GetFieldID(worldClass, "field_72996_f", "Ljava/util/List;");
-    return env->GetObjectField(instance, entityListField);
+    return List(env->GetObjectField(instance, entityListField), env);
 }
 
-jobject World::GetFilteredEntityList(std::function<bool(Entity*)> filter) {
-    jobject entityListObject = GetEntityList();
-    List list(entityListObject, env);
+List World::GetFilteredEntityList(std::function<bool(Entity*)> filter) {
+    List list = GetEntityList();
     jobject filteredList = list.GetFilteredSubList([filter, this](jobject obj) {
         Entity e(obj, this->env);
         return filter(&e);
     });
-    env->DeleteLocalRef(entityListObject);
-    return filteredList;
+    return List(filteredList, env);
 }
 
-jobject World::GetPlayerList() {
+List World::GetPlayerList() {
     static jfieldID playerListField = env->GetFieldID(worldClass, "field_73010_i", "Ljava/util/List;");
-    return env->GetObjectField(instance, playerListField);
+    return List(env->GetObjectField(instance, playerListField), env);
 }

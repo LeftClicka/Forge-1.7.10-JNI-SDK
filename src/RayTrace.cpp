@@ -14,8 +14,8 @@ RayTraceResult::~RayTraceResult() {
     env->DeleteGlobalRef(TYPE_BLOCK);
 }
 
-jobject RayTraceResult::GetHitEntity() {
-    return env->GetObjectField(instance, entityHitField);
+Entity RayTraceResult::GetHitEntity() {
+    return Entity(env->GetObjectField(instance, entityHitField), env);
 }
 
 jobject RayTraceResult::GetHitType() {

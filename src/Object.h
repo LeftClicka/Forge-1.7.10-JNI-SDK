@@ -23,11 +23,18 @@ class Object {
             this->instance = instance;
             this->env = env;
         }
-        virtual ~Object() = default;
+        inline virtual ~Object() {
+            Delete();
+        }
+        Object(const Object&) = delete;
+        Object& operator=(const Object&) = delete;
+        Object(Object&&) = default;
+        Object& operator=(Object&&) = default;
         /**
-         * Swaps the underlying instance.
+         * Swaps the underlying instance. Delets the old ref.
          */
         inline void SwapInstance(jobject instance) {
+            Delete();
             this->instance = instance;
         }
         /**
@@ -35,6 +42,38 @@ class Object {
          */
         inline jobject GetInstance() const {
             return instance;
+        }
+        /**
+         * Deletes the underlying ref (local ref).
+         */
+        inline void DeleteLocal() {
+            env->DeleteLocalRef(instance);
+        }
+        /**
+         * Deletes the underlying ref (global ref).
+         */
+        inline void DeleteGlobal() {
+            env->DeleteGlobalRef(instance);
+        }
+        /**
+         * If the underlying ref is local, it will be deleted and replaced with a global one.
+         */
+        void MakeGlobal();
+        /**
+         * Free's the underlying ref.
+         */
+        void Delete();
+        /**
+         * Returns a new local copy of the underlying reference.
+         */
+        inline jobject NewLocalRef() {
+            return env->NewLocalRef(instance);
+        }
+        /**
+         * Returns a new global copy of the underlying reference.
+         */
+        inline jobject NewGlobalRef() {
+            return env->NewGlobalRef(instance);
         }
     protected:
         jobject instance;

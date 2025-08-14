@@ -63,7 +63,7 @@ This project contains both utility functions and `jobject` wrappers. The wrapper
 
 **Getting Classes:** To receive java class references (`jclass`), use the Java::GetClass function. Do not use JNI's built-in FindClass function, as that cannot find classes loaded by Forge's class loader.
 
-**Memory Management:** The wrappers never take ownership of object references. You are responsible for memory management: you retrieve a `jobject`, wrap it, operate on it, and then free the `jobject`. Everything returned is a local reference, unless the function name and documentation clearly state otherwise. Wrapper methods will never return other wrappers; they will return plain `jobjects` that you must then rewrap. This design ensures you are forced to explicitly handle and free all `jobjects` you receive.
+**Memory Management:** The wrappers take ownership of object references. They will free it when they go out of scope or are deleted. You can explicitly use the methods `NewLocal()` and `NewGlobal()` to receive a copy of the underlying reference. You can also explicitly delete the references using `Delete()`. When you create a wrapper, you take ownership of it. Copy constructor and the assignment operator are deleted. You can only move the wrapper. If wrappers need to be passed, pass by reference or pass the underlying jobject.
 
 **JVM Attachment:** `Java::Attach` should be called at the beginning of your logic and `Java::Detach` at the end. This attaches the calling thread to the JVM and initializes the `JNIEnv` pointer, which can then be retrieved with `Java::GetEnv`.
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Entity.h"
 
 /**
  * Wraps a jobject to expose the MovingObjectPosition interface.
@@ -15,7 +16,7 @@ class RayTraceResult : public Object {
         /**
          * Returns the entity that was hit, null if no entity was hit.
          */
-        jobject GetHitEntity();
+        Entity GetHitEntity();
         /**
          * Returns the type of hit, as an enum constant.
          * 
