@@ -3,7 +3,7 @@ SRCDIR := src
 BUILDDIR := build
 TARGET := out/libjnisdk.a
 CXX := g++
-CXXFLAGS := -O2 -std=c++20
+CXXFLAGS := -O2 -std=c++20 -Iinclude
 AR := ar
 ARFLAGS := rcs
 

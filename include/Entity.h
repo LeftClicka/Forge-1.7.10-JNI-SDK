@@ -6,7 +6,7 @@
 /**
  * Wraps a jobject to expose interface for minecraft's entity class.
  */
-class Entity : public Object {
+class Entity : public Java::Object {
     public:
         /**
          * Constructs an entity.

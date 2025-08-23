@@ -1,6 +1,6 @@
-#include "Object.h"
+#include "Java.h"
 
-void Object::MakeGlobal() {
+void Java::Object::MakeGlobal() {
     jobjectRefType refType = env->GetObjectRefType(instance);
     if (refType == JNILocalRefType) {
         jobject globalRef = env->NewGlobalRef(instance);
@@ -9,7 +9,7 @@ void Object::MakeGlobal() {
     }
 }
 
-void Object::Delete() {
+void Java::Object::Delete() {
     jobjectRefType refType = env->GetObjectRefType(instance);
     if (refType == JNILocalRefType) {
         DeleteLocal();

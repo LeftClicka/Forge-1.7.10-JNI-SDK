@@ -1,14 +1,15 @@
 #include "Java.h"
 
 #include <unordered_map>
+#include <string>
 
 namespace Java {
     
-    static JNIEnv *env;
-    static JavaVM *jvm;
+    static thread_local JNIEnv *env = nullptr;
+    static JavaVM *jvm = nullptr;
 
-    static jobject cl_object;
-    static jmethodID find_class_method;
+    static jobject cl_object = nullptr;
+    static jmethodID find_class_method = nullptr;
 
     //Initialization of JNI
     //Required for anything else to work; called once in the main method
@@ -47,6 +48,9 @@ namespace Java {
     }
 
     JNIEnv *GetEnv() {
+        if (env == nullptr) {
+            jvm->AttachCurrentThread((void**)&env, nullptr);
+        }
         return env;
     }
 
@@ -93,6 +97,20 @@ namespace Java {
         return global;
     }
 
+    jobject GetEnumGlobal(const char *className, const char *fieldName, JNIEnv *env) {
+        jclass clazz = Java::GetClass(className, env);
+        std::string signature = "";
+        signature += "L";
+        signature += className;
+        signature += ";";
+        jfieldID field = env->GetStaticFieldID(clazz, fieldName, signature.c_str());
+        jobject local = env->GetStaticObjectField(clazz, field);
+        jobject global = env->NewGlobalRef(local);
+        env->DeleteLocalRef(clazz);
+        env->DeleteLocalRef(local);
+        return global;
+    }
+
     jfieldID GetField(const char *clazzName, const char *fieldName, const char *sig, JNIEnv *env) {
         jclass clazz = GetClass(clazzName, env);
         jfieldID field = env->GetFieldID(clazz, fieldName, sig);
@@ -106,6 +124,5 @@ namespace Java {
         env->DeleteLocalRef(clazz);
         return method;
     }
-
 
 }

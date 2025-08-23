@@ -2,13 +2,14 @@
 
 #include "Object.h"
 #include "Entity.h"
+#include "List.h"
 
 #include <functional>
 
 /**
  * Wraps a jobject to expose the World interface.
  */
-class World : public Object {
+class World : public Java::Object {
     public:
         /**
          * Constructs a world.
@@ -18,15 +19,15 @@ class World : public Object {
         /**
          * Returns the entity list object.
          */
-        jobject GetEntityList();
+        List GetEntityList();
         /**
          * Returns a list containing only loaded entities that pass the specified filter.
          */
-        jobject GetFilteredEntityList(std::function<bool(Entity*)> filter);
+        List GetFilteredEntityList(std::function<bool(Entity*)> filter);
         /**
          * Returns the player list object.
          */
-        jobject GetPlayerList();
+        List GetPlayerList();
     private:
         jclass worldClass;
 };

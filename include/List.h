@@ -7,7 +7,7 @@
 /**
  * Wraps a jobject to expose interface for the java.util.List interface.
  */
-class List : public Object {
+class List : public Java::Object {
     public:
         /**
          * Constructs a list.

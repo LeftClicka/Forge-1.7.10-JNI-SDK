@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Java.h"
+
 #include "Math.h"
+#include "Object.h"
 
 /**
  * Utility functions for 2D rendering.
